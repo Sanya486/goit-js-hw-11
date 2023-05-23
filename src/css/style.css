@@ -1,0 +1,81 @@
+body{
+    margin: 0;
+}
+
+.container{
+    margin: 0 auto;
+    min-width: 1240;
+    padding: 0 20px; 
+}
+
+.header {
+    background-color: rgb(43, 134, 226);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.main-section{
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    margin: 0 auto;
+}
+
+button[type="submit"] {
+    min-width: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+}
+
+.form-wrapper{
+    position: relative;
+}
+
+.icon{
+   display: flex;
+}
+
+.glass-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.gallery{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.photo-card{
+    width: calc((100% - 20px * 3)/ 4);
+}
+
+.image-wrapper{
+    width: 100%;
+}
+
+.gallery-image {
+    object-fit: cover;
+    width: 100%;
+    height: 200px;
+}
+
+.info{
+    display: flex;
+    justify-content:space-around;
+}
+
+p {
+    font-size: small;
+    text-align: center;
+}
