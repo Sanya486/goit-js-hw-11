@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body{
     margin: 0;
 }
@@ -58,8 +62,10 @@ input {
 
 .photo-card{
     width: calc((100% - 20px * 3)/ 4);
+    border: 2px solid rgba(1, 58, 150, 0.579);
+    border-radius: 5px;
+    box-shadow: 6px 10px 32px -11px rgba(0,0,0,0.75);box-shadow: 6px 10px 32px -11px rgba(0,0,0,0.75);
 }
-
 .image-wrapper{
     width: 100%;
 }
