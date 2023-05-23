@@ -114,3 +114,4 @@ function smoothScroll(element, increment) {
                     behavior: "smooth",
                 });
 }
+
