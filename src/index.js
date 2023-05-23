@@ -3,7 +3,8 @@ import { Notify } from "notiflix";
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-
+// Для HTTP-запитів використана бібліотека axios.
+// Використовується синтаксис async/await.
 
 let lightbox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',

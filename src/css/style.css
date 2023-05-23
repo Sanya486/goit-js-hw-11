@@ -85,3 +85,9 @@ p {
     font-size: small;
     text-align: center;
 }
+.info-item{
+    padding: 5px;
+    border: 2px solid rgba(8, 1, 150, 0.236);
+    border-radius: 5px;
+    
+}
