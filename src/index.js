@@ -3,7 +3,12 @@ import { Notify } from "notiflix";
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-let lightbox = new SimpleLightbox('.gallery a', {})
+
+
+let lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+  })
 
 
 const refs = {
@@ -20,7 +25,7 @@ let seaerchRequest = "";
 
 refs.formEl.addEventListener('submit', OnSubmit);
 
-const observer = new IntersectionObserver(OnObserve, {rootMargin: '300px'});
+const observer = new IntersectionObserver(OnObserve, {rootMargin: '0px'});
 
 function OnSubmit (e) {
     e.preventDefault();
@@ -41,12 +46,15 @@ function OnSubmit (e) {
     .catch((error => console.log(error)))
     .finally(()=> {
         observer.observe(refs.anchor);
-    lightbox.refresh();})
+        lightbox.refresh();
+        window.scrollBy({
+            top: 60,
+            behavior: "smooth",
+  });
+})
 }
 
 function OnObserve (entries) {
-    console.log('AGA POOPALSA'
-    )
     entries.forEach(entry => {
         if(entry.isIntersecting === true){
             page += 1
@@ -56,13 +64,18 @@ function OnObserve (entries) {
                     observer.unobserve(refs.anchor)
                     Notify.info(`We're sorry, but you've reached the end of search results.` )
                 }
-            }).catch(error => console.log(error)).finally(() => {lightbox.refresh()})
+            })
+            .catch(error => console.log(error))
+            .finally(() => {
+                lightbox.refresh();
+                smoothScroll(refs.gallery, 2)
+            })
         }
     })
     
 }
 
-// Помітив цікаву річ. Насправді АРІ віддає не 500 картинок максимально в безкоштовній версії, а як мінімум 520 розмірі пейджа 40) Навіть при тому що totalHits пише 500) Можна легко побачити в каунтері галереї.
+// Помітив цікаву річ. Насправді АРІ віддає не 500 картинок максимально в безкоштовній версії, а як мінімум 520 при розмірі пейджа 40) Навіть при тому що totalHits пише 500) Можна легко побачити в каунтері галереї.
 
 
 function makeAndInsertMarkup ({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
@@ -91,3 +104,13 @@ function makeAndInsertMarkup ({webformatURL, largeImageURL, tags, likes, views, 
   return refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
 
+
+function smoothScroll(element, increment) {
+    const { height: cardHeight } = element
+                .firstElementChild.getBoundingClientRect();
+
+                window.scrollBy({
+                    top: cardHeight * increment,
+                    behavior: "smooth",
+                });
+}
