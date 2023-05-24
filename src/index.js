@@ -3,26 +3,21 @@ import { Notify } from "notiflix";
 import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-// Для HTTP-запитів використана бібліотека axios.
-// Використовується синтаксис async/await.
-
-let lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-  })
-
-
 const refs = {
-    inputEl: document.querySelector('input'),
-    searchBtn: document.querySelector('button'),
-    formEl: document.querySelector('form'),
-    gallery: document.querySelector('.gallery'),
-    anchor: document.querySelector('.anchor')
+  inputEl: document.querySelector('input'),
+  searchBtn: document.querySelector('button'),
+  formEl: document.querySelector('form'),
+  gallery: document.querySelector('.gallery'),
+  anchor: document.querySelector('.anchor')
 };
 
 let page = 0;
 let seaerchRequest = "";
 
+let lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+  })
 
 refs.formEl.addEventListener('submit', OnSubmit);
 
@@ -34,11 +29,12 @@ function OnSubmit (e) {
     page = 1;
     observer.unobserve(refs.anchor)
     seaerchRequest = refs.inputEl.value.trim();
+   if (seaerchRequest !== ''){
     fetchImages(seaerchRequest, page)
     .then(response => {
-        response.hits.forEach(image => makeAndInsertMarkup(image));
-        if(response.totalHits > 0){
-            Notify.success(`Hooray! We found ${response.totalHits} images.`)
+        response.data.hits.forEach(image => makeAndInsertMarkup(image));
+        if(response.data.totalHits > 0){
+            Notify.success(`Hooray! We found ${response.data.totalHits} images.`)
         }
         else {
             Notify.failure('Sorry, there are no images matching your search query. Please try again.')
@@ -53,6 +49,10 @@ function OnSubmit (e) {
             behavior: "smooth",
   });
 })
+   }
+   else {
+    Notify.info(`Please write something that we can find what you are lokking for.`)
+   }
 }
 
 function OnObserve (entries) {
@@ -60,16 +60,18 @@ function OnObserve (entries) {
         if(entry.isIntersecting === true){
             page += 1
             fetchImages(seaerchRequest, page).then(response => {
-                response.hits.forEach((image) => makeAndInsertMarkup(image))
-                if(page === Math.ceil(response.totalHits / PER_PAGE)) {
+                response.data.hits.forEach((image) => makeAndInsertMarkup(image))
+                if(page === Math.ceil(response.data.totalHits / PER_PAGE)) {
                     observer.unobserve(refs.anchor)
                     Notify.info(`We're sorry, but you've reached the end of search results.` )
+                }
+                if (response.data.totalHits !== 0){
+                  smoothScroll(refs.gallery, 2)
                 }
             })
             .catch(error => console.log(error))
             .finally(() => {
                 lightbox.refresh();
-                smoothScroll(refs.gallery, 2)
             })
         }
     })
@@ -77,7 +79,6 @@ function OnObserve (entries) {
 }
 
 // Помітив цікаву річ. Насправді АРІ віддає не 500 картинок максимально в безкоштовній версії, а як мінімум 520 при розмірі пейджа 40) Навіть при тому що totalHits пише 500) Можна легко побачити в каунтері галереї.
-
 
 function makeAndInsertMarkup ({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
     
@@ -108,7 +109,7 @@ function makeAndInsertMarkup ({webformatURL, largeImageURL, tags, likes, views, 
 
 function smoothScroll(element, increment) {
     const { height: cardHeight } = element
-                .firstElementChild.getBoundingClientRect();
+                .firstElementChild?.getBoundingClientRect();
 
                 window.scrollBy({
                     top: cardHeight * increment,
