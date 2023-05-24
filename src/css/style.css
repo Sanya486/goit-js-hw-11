@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&family=Rubik+Puddles&display=swap');
 * {
     box-sizing: border-box;
+    
 }
+
+
 
 body{
     margin: 0;
@@ -12,11 +16,34 @@ body{
     padding: 0 20px; 
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+
+.logo-showel {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+.logo-text {
+    margin-right: 10px;
+    font-size:x-large;
+
+    color: aliceblue;
+    font-family: 'Raleway', sans-serif;
+    font-family: 'Rubik Puddles', cursive;
+}
+
+.logo-pic{
+    
+}
+
 .header {
     background-color: rgb(43, 134, 226);
     padding: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .main-section{
