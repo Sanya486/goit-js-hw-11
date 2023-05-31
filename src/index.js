@@ -13,6 +13,7 @@ const refs = {
 
 let page = 0;
 let seaerchRequest = "";
+let totalHits = 0;
 
 let lightbox = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
@@ -32,6 +33,7 @@ function OnSubmit (e) {
    if (seaerchRequest !== ''){
     fetchImages(seaerchRequest, page)
     .then(response => {
+      totalHits = response.data.totalHits
         response.data.hits.forEach(image => makeAndInsertMarkup(image));
         if(response.data.totalHits > 0){
             Notify.success(`Hooray! We found ${response.data.totalHits} images.`)
@@ -59,12 +61,13 @@ function OnObserve (entries) {
     entries.forEach(entry => {
         if(entry.isIntersecting === true){
             page += 1
-            fetchImages(seaerchRequest, page).then(response => {
+            if (page === Math.ceil(totalHits / PER_PAGE) + 1){
+              observer.unobserve(refs.anchor)
+              Notify.info(`We're sorry, but you've reached the end of search results.` )
+            }
+            else {
+              fetchImages(seaerchRequest, page).then(response => {
                 response.data.hits.forEach((image) => makeAndInsertMarkup(image))
-                if(page === Math.ceil(response.data.totalHits / PER_PAGE)) {
-                    observer.unobserve(refs.anchor)
-                    Notify.info(`We're sorry, but you've reached the end of search results.` )
-                }
                 if (response.data.totalHits !== 0){
                   smoothScroll(refs.gallery, 2)
                 }
@@ -73,6 +76,7 @@ function OnObserve (entries) {
             .finally(() => {
                 lightbox.refresh();
             })
+            }
         }
     })
     
